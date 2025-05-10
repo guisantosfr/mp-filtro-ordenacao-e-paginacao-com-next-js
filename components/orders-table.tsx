@@ -8,11 +8,9 @@ import {
 } from '@/components/ui/table';
 import { Badge } from './ui/badge';
 import { ChevronsUpDown } from 'lucide-react';
+import { Order } from '@/lib/types';
 
-export default async function OrdersTable() {
-  const data = await fetch(process.env.API_URL + '/orders-api/orders');
-  const orders = await data.json();
-
+export default function OrdersTable({ orders }: { orders: Order[] }) {
   const formatAmount = (amount: number) => {
     const amountInR$ = (amount / 100).toLocaleString('pt-BR', {
       style: 'currency',
@@ -42,7 +40,7 @@ export default async function OrdersTable() {
       </TableHeader>
       <TableBody>
         {
-          orders.data.map(order => {
+          orders.map((order: Order) => {
             return (
               <TableRow key={order.id}>
                 <TableCell>
@@ -58,9 +56,9 @@ export default async function OrdersTable() {
                   </Badge>
                 </TableCell>
 
-                <TableCell className="hidden md:table-cell">{order.order_date}</TableCell>
+                <TableCell className="hidden md:table-cell">{order.order_date.toString()}</TableCell>
 
-                <TableCell className="text-right">{formatAmount(order.amount_in_cents)}</TableCell>
+                <TableCell className="text-right">{ formatAmount(order.amount_in_cents)}</TableCell>
               </TableRow>
             )
           })

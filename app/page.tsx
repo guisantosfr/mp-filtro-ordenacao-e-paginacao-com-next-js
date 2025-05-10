@@ -12,6 +12,10 @@ import {
 } from '@/components/ui/card';
 
 export default async function Component() {
+  const data = await fetch(process.env.API_URL + '/orders-api/orders');
+  const json = await data.json();
+  const orders = json.data;
+
   return (
     <main className="container px-1 py-10 md:p-10">
       <Card>
@@ -26,7 +30,7 @@ export default async function Component() {
           </div>
         </CardHeader>
         <CardContent>
-          <OrdersTable />
+          <OrdersTable orders={orders} />
           <div className="mt-8">
             <Pagination />
           </div>
