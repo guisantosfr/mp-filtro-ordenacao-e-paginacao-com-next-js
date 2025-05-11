@@ -11,8 +11,25 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 
-export default async function Component() {
-  const data = await fetch(process.env.API_URL + '/orders-api/orders');
+import { notFound } from 'next/navigation';
+
+interface Props {
+  searchParams: {
+    search?: string;
+  };
+}
+
+export default async function Component({ searchParams }: Props) {
+  const search = searchParams.search || '';
+
+  const endpoint = search.length > 0
+  ? `${process.env.API_URL}/orders-api/orders?search=${encodeURIComponent(search)}`
+  : `${process.env.API_URL}/orders-api/orders`;
+
+  const data = await fetch(endpoint);
+
+  if (!data.ok) return notFound();
+
   const json = await data.json();
   const orders = json.data;
 
@@ -25,7 +42,7 @@ export default async function Component() {
             Uma listagem de pedidos do seu negócio.
           </CardDescription>
           <div className="flex pt-10 gap-4">
-            <SearchInput />
+            <SearchInput defaultValue={search} />
             <FilterDropdown />
           </div>
         </CardHeader>
