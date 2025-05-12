@@ -1,3 +1,4 @@
+'use client';
 
 import {
   DropdownMenu,
@@ -11,8 +12,29 @@ import {
 
 import { Button } from '@/components/ui/button';
 import { Filter } from 'lucide-react';
+import { useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 export default function FilterDropdown() {
+  const [status, setStatus] = useState<string>('');
+
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter(); 
+
+  const handleStatusChange = (value: string) => {
+    const params = new URLSearchParams(searchParams);
+
+    if (value) {
+      params.set('status', value);
+    } else {
+      params.delete('status');
+    }
+
+    replace(`${pathname}?${params.toString()}`);
+    setStatus(value);
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -26,10 +48,13 @@ export default function FilterDropdown() {
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="w-16">
+      <DropdownMenuContent className="w-16" >
         <DropdownMenuLabel>Filtrar por:</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuRadioGroup value="">
+        <DropdownMenuRadioGroup
+        value={status} 
+        onValueChange={handleStatusChange}
+        >
           <DropdownMenuRadioItem value="">Todos</DropdownMenuRadioItem>
           <DropdownMenuRadioItem value="pending">
             Pendente

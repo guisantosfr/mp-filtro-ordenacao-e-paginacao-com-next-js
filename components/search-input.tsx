@@ -1,15 +1,16 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useDebounce } from '@/lib/use-debounce';
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
 export default function SearchInput({ defaultValue = '' }: { defaultValue?: string }) {
-  const router = useRouter();
+  const { replace } = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const [search, setSearch] = useState(defaultValue);
 
   const debouncedSearch = useDebounce(search, 500);
@@ -23,7 +24,7 @@ export default function SearchInput({ defaultValue = '' }: { defaultValue?: stri
       params.delete('search');
     }
 
-    router.replace(`/?${params.toString()}`);
+    replace(`${pathname}?${params.toString()}`);
   }, [debouncedSearch]);
   
   return (
