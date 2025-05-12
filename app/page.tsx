@@ -16,6 +16,7 @@ interface Props {
   searchParams: {
     search?: string;
     status?: string;
+    sort?: string;
   };
 }
 
@@ -24,6 +25,7 @@ export default async function Component({ searchParams }: Props) {
     params: {
       search: searchParams?.search,
       status: searchParams?.status,
+      sort: searchParams?.sort,
     },
   })
 
