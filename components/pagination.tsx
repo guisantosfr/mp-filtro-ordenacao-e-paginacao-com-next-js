@@ -62,7 +62,7 @@ export default function Pagination( { links, lastPage }: PaginationProps) {
 
             if (link.label == '...'){
               return (
-                <PaginationItem className="hidden md:inline-flex">
+                <PaginationItem key={'...'} className="hidden md:inline-flex">
                   <PaginationEllipsis />
                 </PaginationItem>
               )
@@ -81,7 +81,7 @@ export default function Pagination( { links, lastPage }: PaginationProps) {
           })
         }
 
-        <PaginationItem 
+        <PaginationItem
         className={`${links[links.length - 1].url ? 'cursor-pointer' : 'cursor-auto text-slate-300 hover:text-slate-300'}`}
         onClick={() => { handleClickPage(Number(searchParams.get('page') || 1) + 1) }} >
           <PaginationNext />
