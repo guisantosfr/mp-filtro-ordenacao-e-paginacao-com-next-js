@@ -17,6 +17,7 @@ interface Props {
     search?: string;
     status?: string;
     sort?: string;
+    page?: number;
   };
 }
 
@@ -26,10 +27,13 @@ export default async function Component({ searchParams }: Props) {
       search: searchParams?.search,
       status: searchParams?.status,
       sort: searchParams?.sort,
+      page: searchParams?.page
     },
   })
 
   const orders = response.data.data;
+  const links = response.data.meta.links;
+  const lastPage = response.data.meta.last_page;
 
   return (
     <main className="container px-1 py-10 md:p-10">
@@ -47,7 +51,7 @@ export default async function Component({ searchParams }: Props) {
         <CardContent>
           <OrdersTable orders={orders} />
           <div className="mt-8">
-            <Pagination />
+            <Pagination links={links} lastPage={lastPage}/>
           </div>
         </CardContent>
       </Card>
